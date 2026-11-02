@@ -6,7 +6,7 @@ Windows, 3440×1440, уже работающий FusionFix. Файлы этой 
 
 | Модуль | В 0.2 | Доказательства и границы |
 |---|---|---|
-| Core | Инвентаризация PE/hash/config; изолированный PostFX; журнал/rollback | **Автотесты** временных fixtures на Linux; Windows workflow добавлен. Пользовательский FusionFix/EXE не проверен |
+| Core | Инвентаризация PE/hash/config; изолированный PostFX; журнал/rollback | **Автотесты** временных fixtures на Linux и Windows; PowerShell smoke test пройден. Пользовательский FusionFix/EXE не проверен |
 | Lighting | SDR contrast/color/highlight shoulder | **Автотесты** численной модели и профилей; **исходники** ReShade. DX9 compile/калибровка **требуют игры** |
 | Shadows & Visibility | Реестр настоящих ключей, manual opt-in studies | **Исходники** FusionFix с commit pin. Улучшение в кадре/VRAM/FPS **требует игры**; LOD/culling **экспериментальны** и выключены |
 | Textures | Read-only inventory, DDS header/mip validation, comparison | **Автотесты** синтетических DDS. Извлечение/импорт делегированы внешним инструментам; game roundtrip **требует локальных файлов** |
@@ -26,8 +26,17 @@ Windows, 3440×1440, уже работающий FusionFix. Файлы этой 
 * Комплектность, хеши manifest и воспроизводимость ZIP в одном окружении сборки.
 
 Команда: `python tools/build_release.py` запускает тесты и validator до сборки.
-GitHub Actions содержит Linux+Windows matrix; её факт прохождения нужно смотреть
-в Actions после публикации. Не считать наличие workflow результатом Windows-теста.
+Подтверждённый запуск: [GitHub Actions #1](https://github.com/schepxchh/Nfsundercover-remaster/actions/runs/41437812731)
+для кода commit `63c92310943cf02e4f9dc0f65c5c5ae31abae15b`, 2026-11-02.
+Обе задачи `validate (ubuntu-latest)` и `validate (windows-latest)` завершились
+успешно. Windows log: **39 tests, OK**, 2.227 s; PowerShell entry point smoke test
+успешен. Сборка и загрузка CI-архивов также успешны. Последующее обновление этого
+документа/ZIP не изменяет проверенный исполняемый код. CI использует временные
+fixtures, не установленную игру. Наличие workflow само по себе не считается тестом.
+
+Поставляемый ZIP собран в Linux с LF. Хеш архива в репозитории — в соседнем
+`.zip.sha256`. Переводы строк при Windows checkout могут менять хеш CI-архива;
+воспроизводимость проверяется повторной сборкой в одном окружении.
 
 ## Что не доказано
 
