@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+artifacts/*
+!artifacts/.gitkeep
+local/
+.nfsuc-remaster-state/
+*.log
+*.dmp
+*.dds
+*.exe
+*.dll
+*.asi
+*.bin
+*.bun
+*.tpf

@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "release": "Visual Foundation 0.2",
+  "application": "manual-only; never merge this file as a FusionFix configuration",
+  "default_enabled": false,
+  "evidence": {
+    "repository": "ThirteenAG/WidescreenFixesPack",
+    "commit": "2f4fd579289c67af593b2164f5376bd008de0d35",
+    "checked_utc": "2026-11-02",
+    "settings": "source/NFSUndercover.FusionFix/settings.json",
+    "implementation": "source/NFSUndercover.FusionFix/Misc.ixx",
+    "scope": "source-reviewed; installed FusionFix build and Steam 1.0.0.1 runtime unverified"
+  },
+  "preserve": [
+    "all existing settings unless a single study below is explicitly selected",
+    "MAIN.FPSLimit",
+    "SimRate",
+    "resolution and aspect ratio",
+    "camera and controls",
+    "gameplay, simulation, AI, progression and vehicle performance"
+  ],
+  "source_defaults": {
+    "GRAPHICS.ShadowResolution": 2048,
+    "GRAPHICS.CSMScale": 1.0,
+    "GRAPHICS.CSMScaleNear": 15.0,
+    "GRAPHICS.CSMScaleMid": 90.0,
+    "GRAPHICS.CSMScaleFar": 510.0,
+    "GRAPHICS.ImproveSceneryLOD": 0,
+    "GRAPHICS.DisablePreculler": 0,
+    "GRAPHICS.BruteforceCulling": 0,
+    "GRAPHICS.BloomIntensity": 1.0
+  },
+  "studies": {
+    "shadow-detail": {
+      "enabled": false,
+      "status": "requires-game-test",
+      "changes": { "GRAPHICS.ShadowResolution": 4096 },
+      "requirements": [
+        "the installed build exposes this exact setting",
+        "backup the real configuration first",
+        "do not lower an already higher user setting automatically",
+        "restart game; compare identical shadow scene and frame times"
+      ],
+      "limits": "Device caps and atlas cascade count can clamp the effective resolution; 4096 is a request, not a verified allocation."
+    },
+    "shadow-far-range": {
+      "enabled": false,
+      "status": "experimental",
+      "changes": { "GRAPHICS.CSMScaleFar": 600.0 },
+      "requirements": [
+        "test separately from shadow-detail and scenery studies",
+        "start only from CSMScale=1, CSMScaleNear=15, CSMScaleMid=90, CSMScaleFar=510",
+        "restart game and inspect cascade transition flicker and distant aliasing"
+      ],
+      "limits": "A larger cascade extent may spread existing texels more thinly; no verified draw distance in metres and no guaranteed quality improvement."
+    },
+    "scenery-last-lod": {
+      "enabled": false,
+      "status": "experimental",
+      "changes": { "GRAPHICS.ImproveSceneryLOD": 1 },
+      "requirements": [
+        "highest in-game world detail",
+        "test on the same high-speed route separately from shadow changes",
+        "restore the captured original value if pop-in, excess draw calls or instability appears"
+      ],
+      "limits": "Source changes the scenery mask from 0x0E to 0x0F; this exposes the last scenery LOD step, not arbitrary geometry or vehicle LOD distances."
+    }
+  },
+  "never_enable_automatically": [
+    "GRAPHICS.ImproveSceneryLOD",
+    "GRAPHICS.DisablePreculler",
+    "GRAPHICS.BruteforceCulling",
+    "GRAPHICS.CSMScale",
+    "GRAPHICS.CSMScaleNear",
+    "GRAPHICS.CSMScaleMid",
+    "GRAPHICS.CSMScaleFar"
+  ]
+}
