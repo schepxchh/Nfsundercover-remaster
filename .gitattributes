@@ -1,0 +1,4 @@
+* text=auto eol=lf
+*.zip -text
+third_party/reshade/include/** -text
+third_party/reshade/LICENSE.md -text

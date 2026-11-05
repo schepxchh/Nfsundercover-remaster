@@ -50,7 +50,7 @@ def validate(root=ROOT):
     if PAYLOAD != expected:
         errors.append("Installer allowlist differs from reviewed payload")
     for path in root.rglob("*"):
-        if any(p in (".git", "local", "artifacts", "__pycache__") for p in path.parts):
+        if any(p in (".git", "local", "artifacts", "build", "__pycache__") for p in path.parts):
             continue
         if path.suffix.lower() in (".dll", ".exe", ".asi", ".dds", ".bun", ".bin", ".tpk"):
             errors.append(f"Unapproved distributable binary/game asset: {path.relative_to(root)}")

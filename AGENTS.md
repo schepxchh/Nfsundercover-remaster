@@ -49,3 +49,12 @@ recorded upstream URL, version, license and redistribution decision. Default to
 official user-installed dependencies; bundle no third-party executable or game
 assets. No-license source is inspection-only, not permission to copy. Preserve
 notices and obtain rights to any replacement asset before distributing it.
+
+## Native Foundation
+
+Native C++17 code lives in native/. The only vendored source is the pinned official
+ReShade add-on SDK under third_party/reshade with its own BSD license and snapshot.
+Do not apply our MIT license to those files. No console decompilation code is copied.
+Native bridge defaults disabled; no automatic native installation, game-memory writes
+or guessed hook ABI. Run portable C++ checks and Windows x86 CMake/CTest before
+publishing native source. Shader bytecode compilation is separate from GPU execution.

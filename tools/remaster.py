@@ -18,7 +18,7 @@ import tempfile
 import zipfile
 
 PROJECT = "nfsuc-visual-foundation"
-VERSION = "0.2.0"
+VERSION = "0.3.0"
 STATE = ".nfsuc-remaster-state"
 PAYLOAD = {
     "nfsuc-remaster/Shaders/NFSUCFoundation.fx": "shaders/NFSUCFoundation.fx",

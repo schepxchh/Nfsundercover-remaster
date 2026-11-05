@@ -1,5 +1,13 @@
 # NFS Undercover: Definitive Remaster
 
+**Продолжение: Native Foundation 0.3.0.** Добавлены C++17 core/render graph,
+собственный DX9 backend и ps_3_0 HLSL, standalone host, официальный ReShade API
+bridge и read-only PE/shader probe. Native add-on по умолчанию выключен.
+[Сборка и устройство native слоя](docs/NATIVE.md) ·
+[Исследование пяти upstream проектов](docs/ENGINE_RESEARCH.md).
+Файлы, профили и готовый ZIP 0.2 сохранены; инструкции ниже относятся к FX-слою.
+Source ZIP 0.3 дополнительно содержит лицензированные заголовки SDK ReShade.
+
 **Visual Foundation 0.2.0 — первая сборка для локального тестирования.**
 
 Долгосрочный визуальный ремастер Need for Speed: Undercover (2008), DirectX 9.
@@ -17,7 +25,7 @@
 ZIP находится в [artifacts](https://github.com/schepxchh/Nfsundercover-remaster/tree/main/artifacts)
 и создаётся командой `python tools/build_release.py`. Рядом SHA256; внутри
 `MANIFEST.json` с хешами каждого файла. Распакуйте **в отдельную папку вне игры**.
-Архив содержит исходники, инструменты и документацию; сторонних DLL/ASI, nfs.exe
+Архив содержит исходники, инструменты, документацию и лицензированные SDK headers; сторонних DLL/ASI, nfs.exe
 и ресурсов EA нет. Правила лицензирования: [THIRD_PARTY.md](THIRD_PARTY.md).
 
 1. Оставьте рабочий FusionFix и 3440×1440 как есть. Не устанавливайте новую версию

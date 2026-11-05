@@ -1,4 +1,32 @@
-# Visual Foundation 0.2: состояние доказательств
+# Состояние доказательств
+
+## Native Foundation 0.3 (2026-11-05)
+
+Существующий FX payload и архив 0.2 сохранены. Новый C++17 core прошёл 14 112
+проверок в Debug и Release; observer прошёл 5 комплексных тестовых сценариев,
+включая конкурентные наблюдения. Python suite расширен до 58 тестов: PE/shader
+probe, provenance SDK, прежние install/restore и packaging. Локально эти проверки
+проходят в Linux. Windows x86 build и D3DCompile проверяются отдельной native CI
+задачей; результат нужно смотреть в GitHub Actions текущего коммита.
+
+Реализованы собственный DX9 SDR backend, ReShade API bridge, standalone host и
+read-only probe; см. [NATIVE.md](NATIVE.md). SDK интегрирован как лицензированный
+неизменённый исходный код. Нативная обработка и observer выключены по умолчанию.
+Автоматическая установка по-прежнему ограничена прежними четырьмя FX-файлами.
+
+**Не проверено в игре:** GPU execution, add-on load order, Steam/FusionFix runtime,
+выбор depth/engine targets, реальные performance/VRAM и эстетика. Нативный проход
+сейчас делает только SDR color/contrast/highlight shoulder; depth, shadows,
+reflections, particles, texture/geometry replacement и LOD остаются выключенными
+не реализованными engine-модулями. Render graph пока планирует и проверяет
+зависимости; произвольного GPU graph executor ещё нет. Наличие host исходника
+не является отчётом его успешного GPU-запуска.
+
+Исследование: nfsuc decomp — console scaffold без PC symbols; Modern Fix —
+retail 1.1.2.1 + DXVK; ExOpts содержит точные Steam source candidates, но также
+запрещённые gameplay изменения. В нативный runtime их адреса и код не перенесены.
+
+## Архив Visual Foundation 0.2
 
 Дата: 2026-11-02. Целевая установка пользователя: Steam, nfs.exe 1.0.0.1,
 Windows, 3440×1440, уже работающий FusionFix. Файлы этой установки в облако

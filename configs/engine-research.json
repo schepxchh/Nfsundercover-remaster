@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "checked_utc": "2026-11-05",
+  "purpose": "Research evidence for read-only analysis and future separately gated native visual work; not a runtime patch manifest",
+  "runtime_writes_enabled": false,
+  "evidence_level": "source/documentation",
+  "runtime_compatibility": "requires game run",
+  "sources": [
+    {
+      "repository": "dbalatoni13/nfsuc",
+      "commit": "efa6d94c800e4c6d29a24c75820a0b28bbede3a8",
+      "license": "CC0-1.0",
+      "targets": ["SPEED_DEBUG_OPT_EN_US (Xbox 360 prototype)", "RX9E69 (Wii US release)"],
+      "pc_steam_target_confirmed": false,
+      "files_reviewed": ["README.md", "configure.py", "config/SPEED_DEBUG_OPT_EN_US/config.yml", "config/SPEED_DEBUG_OPT_EN_US/symbols.txt", "config/SPEED_DEBUG_OPT_EN_US/splits.txt", "LICENSE"],
+      "finding": "Console decompilation scaffold. Pinned tree has no PC render implementation; symbols/splits are intentionally empty and X360 configuration contains placeholder hash. No PC addresses or structures may be inferred."
+    },
+    {
+      "repository": "ExOptsTeam/NFSUCExOpts",
+      "commit": "21cd448b1cd2cf4e4d6ab26796f3860aceb9ea6b",
+      "license": "GPL-3.0",
+      "targets": ["Steam nfs.exe 1.0.0.1 per upstream compatibility message"],
+      "source_normalization_base": "0x00400000",
+      "source_normalized_entrypoint": "0x008AEC55",
+      "source_message_file_size_bytes": 10584064,
+      "guard_limit": "DllMain checks normalized entrypoint only; file size is text in the error message, not a validation condition. No executable SHA256 supplied by source.",
+      "files_reviewed": ["NFSUCExtraOptions/dllmain.cpp", "NFSUCExtraOptions/GlobalVariables.h", "NFSUCExtraOptions/ExtraOptionsStuff.h", "NFSUCExtraOptions/InGameFunctions.h", "NFSUCExtraOptionsSettings.ini", "LICENSE"],
+      "reuse": "Facts and symbol references only; no GPL implementation copied into MIT native module."
+    },
+    {
+      "repository": "Brdjx/nfs-undercover-modern-fix",
+      "commit": "b57ffcaf480ab08bf0ddda93c3a2a4ea057b166d",
+      "license": "MIT",
+      "targets": ["retail/EA nfs.exe 1.1.2.1 per README and src/main.c"],
+      "pc_steam_target_confirmed": false,
+      "files_reviewed": ["README.md", "NFSUndercoverFix.ini", "src/main.c", "src/d3d9log.c", "src/stateguard.c", "src/nfsufix.h", "LICENSE"],
+      "conflicts": ["version.dll proxy slot", "DXVK d3d9.dll competes with ReShade D3D9 proxy name", "Direct3DCreate9 IAT and IDirect3D9 vtable hooks", "fixed retail address ranges do not establish Steam compatibility"],
+      "integration": "Observation and conflict detection only; never auto-install or copy retail addresses into Steam module."
+    },
+    {
+      "repository": "ThirteenAG/WidescreenFixesPack",
+      "commit": "c9b32a0582123b2356fe1e9b3c5a68b02eb7f067",
+      "license": "MIT (root license; dependencies separately licensed)",
+      "files_reviewed": ["source/NFSUndercover.FusionFix/dllmain.cpp", "source/NFSUndercover.FusionFix/PostFX.ixx", "source/NFSUndercover.FusionFix/Misc.ixx", "source/NFSUndercover.FusionFix/Input.ixx", "source/NFSUndercover.FusionFix/settings.json", "source/NFSUndercover.FusionFix/FixSettings.hpp"],
+      "finding": "Existing owner of CSM/scenery patches, game callbacks, SMAA/gamma and overlay. Settings persist in CFG with runtime API. Do not stack equivalent hooks or assume installed user version equals current source."
+    }
+  ],
+  "visual_candidates": [
+    {
+      "id": "vehicle-visual-lod",
+      "source_repository": "ExOptsTeam/NFSUCExOpts",
+      "source_file": "NFSUCExtraOptions/GlobalVariables.h",
+      "symbols": [
+        {"name": "_ForceCarLOD", "source_va": "0x00D3CED8", "type_evidence": "WriteMemory<int> in ExtraOptionsStuff.h", "exopts_ini_default": -1, "documented_settings": [-1, 0, 1, 2, 3, 4]},
+        {"name": "_ForceTireLOD", "source_va": "0x00D3CEDC", "type_evidence": "WriteMemory<int> in ExtraOptionsStuff.h", "exopts_ini_default": -1, "documented_settings": [-1, 0, 1, 2, 3]}
+      ],
+      "original_executable_value_confirmed": false,
+      "action": "Read-only PE analysis first. Convert VA to RVA only under explicitly verified matching PE image base and target evidence. Do not interpret unbacked virtual BSS as on-disk bytes.",
+      "future_status": "experimental; separate native toggle off by default; in-game build and race tests required"
+    },
+    {
+      "id": "csm-and-scenery",
+      "source_repository": "ThirteenAG/WidescreenFixesPack",
+      "source_file": "source/NFSUndercover.FusionFix/Misc.ixx",
+      "settings": ["GRAPHICS.ShadowResolution", "GRAPHICS.CSMScale", "GRAPHICS.CSMScaleNear", "GRAPHICS.CSMScaleMid", "GRAPHICS.CSMScaleFar", "GRAPHICS.ImproveSceneryLOD"],
+      "action": "Use documented settings of the installed FusionFix build. Reuse existing owner rather than installing duplicate memory hooks.",
+      "future_status": "source confirmed; visual result requires game run"
+    },
+    {
+      "id": "native-d3d9-observation",
+      "api": ["Direct3DCreate9", "IDirect3D9::CreateDevice", "IDirect3DDevice9::Reset", "IDirect3DDevice9::EndScene"],
+      "action": "Prefer read-only import/resource observation; a future standalone ASI must discover actual API resources and hook ownership with rollback, not copy fixed retail IAT ranges.",
+      "future_status": "design candidate; no claim of external FusionFix callback ABI"
+    }
+  ],
+  "excluded_integration": [
+    "ExOpts Thing/eDisplayFrame gameplay hotkey handler",
+    "ExOpts GameSpeed, traffic/opponents, unlocks, cash, pursuit rules, rev limiter, reverse input, save/load position",
+    "FusionFix MAIN.FPSLimit and SimRate changes",
+    "modern-fix core-count spoofing, timer/thread changes and device fallback parameter changes in an already stable baseline",
+    "console decompilation code, symbols or addresses treated as PC DX9 layout",
+    "automatic DXVK, proxy DLL chains or renderer replacement"
+  ]
+}

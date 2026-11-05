@@ -1,0 +1,6 @@
+LIBRARY NFSUCNative
+EXPORTS
+    AddonInit
+    AddonUninit
+    NAME DATA
+    DESCRIPTION DATA

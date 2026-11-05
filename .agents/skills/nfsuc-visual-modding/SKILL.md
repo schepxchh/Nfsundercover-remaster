@@ -75,3 +75,15 @@ and high-speed visibility. Log failed tests as well as successes.
 Update docs/STATUS.md with automated / source-documentation / requires game run /
 experimental labels. Package only original source, configs, tools, docs and tests;
 include manifest and SHA256, never third-party DLLs or extracted EA resources.
+
+## Native Foundation 0.3
+
+Read docs/NATIVE.md and docs/ENGINE_RESEARCH.md for the C++17 core, DX9 backend,
+official ReShade event bridge and console-vs-PC evidence. Vendored SDK source is
+permitted only with pinned hashes/notices, currently third_party/reshade; no third-
+party binaries. Native config is strict key=value, disabled by default. Shader
+observation hashes are noncryptographic grouping keys, never build/semantic proof.
+Run `python tools/check_native.py` or CMake/CTest, and Windows Win32 compilation
+including the ps_3_0 compiler test. ReShade callback already owns an active scene;
+pass the borrowed-scene flag and release DEFAULT resources before Reset. Only
+SDR color targets are implemented; no depth copies, geometry or lighting hooks.

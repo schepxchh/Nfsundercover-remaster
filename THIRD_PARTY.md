@@ -1,6 +1,10 @@
 # Third-party research and redistribution policy
 
 Visual Foundation 0.2 bundles original project source, shaders, presets and docs.
+Native Foundation 0.3 additionally vendors the unmodified official ReShade SDK
+headers and its BSD-3-Clause license in `third_party/reshade`. Snapshot metadata
+records exact upstream commit, byte counts, SHA256 and Git blob hashes. Its header
+implementation is compiled into our add-on; include its license in binary packages.
 It does **not** bundle ReShade, FusionFix, ASI loaders, texture tools, proprietary
 SDK binaries, game executables, game textures, geometry, LUTs or third-party mods.
 The project's MIT license applies only to original work in this repository.
@@ -32,3 +36,25 @@ availability and inclusion in another mod do not grant permission to repackage.
 Modified copyleft sources must retain their license and corresponding-source
 obligations; do not paste them into an MIT file. Resolve uncertain rights before
 including a resource; external user installation remains the default.
+
+## Native DX9 research update — 2026-11-05
+
+The references below were inspected before considering native integration. They
+are not bundled dependencies merely by appearing in this table. No Modern Fix
+runtime, DXVK binary, original game code or lookup textures were copied as part of
+this research. See [docs/MODERN_FIX.md](docs/MODERN_FIX.md) for code architecture,
+build restrictions and separation between source evidence and game verification.
+
+| Reference | Pinned license | Decision |
+|---|---|---|
+| Brdjx Modern PC Fix | [MIT, Bradley Jackson, 2026](https://github.com/Brdjx/nfs-undercover-modern-fix/blob/b57ffcaf480ab08bf0ddda93c3a2a4ea057b166d/LICENSE) | Source study only. Its measured target is 1.1.2.1; do not transplant fixed addresses to Steam 1.0.0.1 |
+| Dear ImGui | [MIT, Omar Cornut](https://github.com/ocornut/imgui/blob/8c8b8fc266e8cd7fac09340c0373abc28732adb0/LICENSE.txt) | Candidate for native debug UI; preserve notices if actually integrated |
+| MinHook | [BSD-2-Clause and HDE notices](https://github.com/TsudaKageyu/minhook/blob/8af6b4acae5a9388fd742b56fa79ece89d96f823/LICENSE.txt) | Hook-library reference; no source copied by this research |
+| SafetyHook | [BSL-1.0](https://github.com/cursey/safetyhook/blob/f44cc070a8340f2f26649553c49533475417304d/LICENSE) | Alternative hook-library reference; transitive dependencies require their own review |
+| SMAA | [MIT-style with explicit binary-distribution clarification](https://github.com/iryoku/smaa/blob/71c806a838bdd7d517df19192a20f0c61b3ca29d/LICENSE.txt) | HLSL3 implementation verified in source; no code/lookup textures bundled |
+
+Windows SDK interfaces, system D3D9 and D3DCompiler are platform dependencies;
+Microsoft documentation is evidence about their behavior, not a license to mirror
+arbitrary SDK redistributables. Load the correct x86 system component or use an
+official installation mechanism where required. Keep the native module's own
+original source license distinct from any later third-party additions.

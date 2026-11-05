@@ -1,0 +1,3 @@
+// Generated from the project's original HLSL by CMake. Do not edit.
+#pragma once
+namespace nfsuc { inline constexpr char grade_shader_source[] = R"NFSUCHLSL(@NFSUC_GRADE_SOURCE@)NFSUCHLSL"; }

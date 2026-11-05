@@ -14,3 +14,4 @@ local/
 *.bin
 *.bun
 *.tpf
+build/

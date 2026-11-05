@@ -22,5 +22,36 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'CLI entry point failed' }
       - uses: actions/upload-artifact@v4
         with:
-          name: NFSUC-Visual-Foundation-0.2.0-${{ runner.os }}
-          path: artifacts/NFSUC-Visual-Foundation-0.2.0.zip*
+          name: NFSUC-Visual-Foundation-0.3.0-${{ runner.os }}
+          path: artifacts/NFSUC-Visual-Foundation-0.3.0.zip*
+  native:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure Linux
+        if: runner.os == 'Linux'
+        run: cmake -S . -B build/native -DCMAKE_BUILD_TYPE=Release
+      - name: Configure Windows x86
+        if: runner.os == 'Windows'
+        run: cmake -S . -B build/native -A Win32
+      - run: cmake --build build/native --config Release
+      - run: ctest --test-dir build/native -C Release --output-on-failure
+      - name: Package experimental native artifacts with license
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force artifacts/native
+          Copy-Item build/native/native/Release/NFSUCNative.addon32 artifacts/native/
+          Copy-Item build/native/native/Release/nfsuc_dx9_host.exe artifacts/native/
+          Copy-Item native/config/NFSUCNative.ini artifacts/native/
+          Copy-Item LICENSE artifacts/native/PROJECT-LICENSE.txt
+          Copy-Item third_party/reshade/LICENSE.md artifacts/native/RESHADE-LICENSE.md
+          Copy-Item docs/NATIVE.md artifacts/native/
+      - uses: actions/upload-artifact@v4
+        if: runner.os == 'Windows'
+        with:
+          name: NFSUC-Native-0.3.0-experimental-Win32
+          path: artifacts/native/

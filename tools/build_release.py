@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build deterministic, first-party-only Visual Foundation source/payload ZIP."""
+"""Build deterministic source/payload ZIP with licensed, pinned ReShade SDK headers."""
 import hashlib
 import json
 from pathlib import Path
@@ -8,9 +8,9 @@ import sys
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-DIRS = (".agents/skills/nfsuc-visual-modding", "docs", "configs", "tools", "tests", "shaders", "profiles")
-FILES = ("AGENTS.md", "LICENSE", "README.md", "THIRD_PARTY.md", "VERSION", "CHANGELOG.md")
-ALLOWED = {".md", ".json", ".py", ".ps1", ".ini", ".fx"}
+DIRS = (".agents/skills/nfsuc-visual-modding", "docs", "configs", "tools", "tests", "shaders", "profiles", "native", "third_party")
+FILES = ("AGENTS.md", "LICENSE", "README.md", "THIRD_PARTY.md", "VERSION", "CHANGELOG.md", "CMakeLists.txt")
+ALLOWED = {".md", ".json", ".py", ".ps1", ".ini", ".fx", ".cpp", ".hpp", ".h", ".hlsl", ".def", ".in", ".txt"}
 
 
 def build(root=ROOT, output=None):
@@ -33,8 +33,8 @@ def build(root=ROOT, output=None):
             raise ValueError(f"Symlink not distributable: {path}")
         contents[path.relative_to(root).as_posix()] = path.read_bytes()
     manifest = {"schema": 1, "project": "NFS Undercover: Definitive Remaster",
-                "version": version, "stage": "Visual Foundation; local test candidate",
-                "third_party_binaries": False, "game_assets": False,
+                "version": version, "stage": "Native Foundation; local test candidate",
+                "third_party_binaries": False, "game_assets": False, "third_party_sources": True,
                 "files": {name: {"bytes": len(data), "sha256": hashlib.sha256(data).hexdigest()}
                           for name, data in sorted(contents.items())}}
     contents["MANIFEST.json"] = (json.dumps(manifest, ensure_ascii=False, sort_keys=True, indent=2) + "\n").encode("utf-8")
