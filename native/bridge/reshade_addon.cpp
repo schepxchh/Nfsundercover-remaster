@@ -26,9 +26,19 @@
 
 static_assert(sizeof(void *) == 4, "NFS Undercover requires the Win32 .addon32 target");
 
-extern "C" __declspec(dllexport) const char *NAME = "NFSUC Native Visual Foundation";
-extern "C" __declspec(dllexport) const char *DESCRIPTION =
+// NAME/DESCRIPTION are reserved .def directives. Explicit x86 C aliases provide
+// the SDK's undecorated data names without ambiguous .def parsing/decoration.
+#if defined(_MSC_VER) && defined(_M_IX86)
+#pragma comment(linker, "/EXPORT:NAME=_NAME,DATA")
+#pragma comment(linker, "/EXPORT:DESCRIPTION=_DESCRIPTION,DATA")
+#define NFSUC_METADATA_EXPORT
+#else
+#define NFSUC_METADATA_EXPORT __declspec(dllexport)
+#endif
+extern "C" NFSUC_METADATA_EXPORT const char *NAME = "NFSUC Native Visual Foundation";
+extern "C" NFSUC_METADATA_EXPORT const char *DESCRIPTION =
     "Experimental native DX9 SDR grade; disabled by default, visual-only.";
+#undef NFSUC_METADATA_EXPORT
 
 namespace {
 using Runtime = reshade::api::effect_runtime;
