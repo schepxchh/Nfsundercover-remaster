@@ -60,7 +60,8 @@ private:
 
 HRESULT compile_grade_shader(ID3DBlob** bytecode,ID3DBlob** errors) noexcept {
     return D3DCompile(grade_shader_source,std::strlen(grade_shader_source),"NFSUC native grade",
-        nullptr,nullptr,"main","ps_3_0",D3DCOMPILE_ENABLE_STRICTNESS|D3DCOMPILE_OPTIMIZATION_LEVEL3,
+        // SM3 uses legacy sampler2D/tex2D, rejected by modern HLSL strict mode.
+        nullptr,nullptr,"main","ps_3_0",D3DCOMPILE_ENABLE_BACKWARDS_COMPATIBILITY|D3DCOMPILE_OPTIMIZATION_LEVEL3,
         0,bytecode,errors);
 }
 

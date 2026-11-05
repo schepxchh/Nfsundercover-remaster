@@ -1,6 +1,6 @@
-LIBRARY NFSUCNative
+LIBRARY "NFSUCNative.addon32"
 EXPORTS
     AddonInit
     AddonUninit
-    NAME DATA
-    DESCRIPTION DATA
+    "NAME" DATA
+    "DESCRIPTION" DATA
